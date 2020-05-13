@@ -168,7 +168,7 @@ var places = [
           icon.setAttribute('clickhandler', true);
 
           // for debug purposes, just show in a bigger scale
-          icon.setAttribute('scale', '20, 20');
+          //icon.setAttribute('scale', '20, 20');
           console.log(icon);
 
           scene.appendChild(icon);
