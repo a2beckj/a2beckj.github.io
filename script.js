@@ -161,14 +161,14 @@ var places = [
 
           // add place icon
           const icon = document.createElement('a-image');
-          icon.setAttribute('gps-entity-place', "latitude:"+ latitude , "longitude:" + longitude);
+          icon.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude}`);
           icon.setAttribute('name', place.name);
           icon.setAttribute('src', ' ./map-marker.png ');
           icon.setAttribute('look-at', '[gps-camera]');
           icon.setAttribute('clickhandler', true);
 
           // for debug purposes, just show in a bigger scale
-          //icon.setAttribute('scale', '20, 20');
+          icon.setAttribute('scale', '20, 20');
           console.log(icon);
 
           scene.appendChild(icon);
