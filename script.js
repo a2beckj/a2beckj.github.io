@@ -163,7 +163,7 @@ var places = [
           const icon = document.createElement('a-image');
           icon.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude}`);
           icon.setAttribute('name', place.name);
-          icon.setAttribute('src', ' ./map-marker.png ');
+          icon.setAttribute('src', ' ./Bushaltestelle_img.jpg ');
           icon.setAttribute('look-at', '[gps-camera]');
           icon.setAttribute('clickhandler', true);
 
