@@ -10,7 +10,7 @@ function getLocation() {
 function showPosition(position) {
     var coordLat = position.coords.longitude;
     var coordLong = position.coords.latitude;
-    //console.log(coordLat, coordLong);
+    console.log(coordLat, coordLong);
 }
 
 getLocation();
@@ -106,6 +106,7 @@ var dist = function (origin, dest) {
     //distance
     var d = Math.round(R * c);
 
+
     return d;
 }
 
@@ -138,4 +139,40 @@ var direc = function (origin, dest) {
     var y = Math.sin((φ4 - φ3) * Math.cos(φ2));
     var x = Math.cos(φ1) * Math.sin(φ2) - Math.sin(φ1) * Math.cos(φ2) * Math.cos(φ4 - φ3);
     var brng = Math.atan2(y, x) * 180 / Math.PI;
+
+    //avoid negative bearing
+    if (brng < 0) {
+        brng += 360;
+    }
+
+    return brng;
 }
+
+function main(){
+  // Access the coordinates of the point (GeoJson)
+  //var pnt = JSON.parse(inicall); 
+
+  // initialize output array
+  outarr = [];
+
+  // for every point in pointcloud do the following calculations
+  for (var i = 0; i < inicall.length; i++) {
+      var name = inicall.properties.lbez [i]
+      var d = dist(getLocation(), inicall.geometry.coordinates [i]); // Distance (function-call)
+      var text = direc(getLocation(), inicall.geometry.coordinates [i]); // Direction (function-call)
+     
+
+      //all together in one array
+      outarr.push([name, d, text]);
+
+      //sort values in array by ascending distances
+      outarr.sort(
+          function(a,b) {
+          return a[1] - b[1];
+          }
+      )
+      outarr.slice(0,5);
+      return outarr;
+      } 
+
+      console.log(main());
