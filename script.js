@@ -1,5 +1,7 @@
 
-
+window.onload = () => {
+  navigator.geolocation.getCurrentPosition(loadPlaces);}
+   //get current user location
 
 /**
  * @description This function takes the input coordinates from an oringin and a destination as arrays
@@ -139,9 +141,7 @@ var places = [
 }
 
 
-window.onload = () => {
-  const places = navigator.geolocation.getCurrentPosition(loadPlaces);}
-   //get current user location
+
   function main(places){
     //places = loadPlaces();
     //var places = loadPlaces();
@@ -161,7 +161,7 @@ window.onload = () => {
           const icon = document.createElement('a-image');
           icon.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude}`);
           icon.setAttribute('name', place.name);
-          icon.setAttribute('src', ' https://a2beckj.github.io/Bushaltestelle_img.jpg ');
+          icon.setAttribute('src', ' ./Bushaltestelle_img.jpg ');
           icon.setAttribute('look-at', '[gps-camera]');
           icon.setAttribute('clickhandler', true);
 
