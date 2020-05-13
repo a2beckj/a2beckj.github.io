@@ -77,7 +77,7 @@ function loadPlaces(position){
         //get coordinates of busstop
         var coords = x.features[i].geometry.coordinates;
         //get distance of busstop
-        var distance = dist([position.coords.longitude, position.coords.latitudeo], coords);
+        var distance = dist([position.coords.longitude, position.coords.latitude], coords);
                 //save all the data above in a single array
         var inarr = [lagebez, coords, distance];
         //push the array into the output array
@@ -135,6 +135,7 @@ var places = [
       }
       
   }];
+  console.log(places);
   main(places);
 }
 
@@ -156,10 +157,11 @@ var places = [
       places.forEach((place) => {
           const latitude = place.location.lat;
           const longitude = place.location.lng;
+          console.log(latitude, longitude);
 
           // add place icon
           const icon = document.createElement('a-image');
-          icon.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude}`);
+          icon.setAttribute('gps-entity-place', "latitude:"+ latitude , "longitude:" + longitude);
           icon.setAttribute('name', place.name);
           icon.setAttribute('src', ' ./Bushaltestelle_img.jpg ');
           icon.setAttribute('look-at', '[gps-camera]');
@@ -167,6 +169,7 @@ var places = [
 
           // for debug purposes, just show in a bigger scale
           icon.setAttribute('scale', '20, 20');
+          console.log(icon);
 
           scene.appendChild(icon);
         }); 
