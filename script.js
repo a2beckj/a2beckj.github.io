@@ -1,76 +1,5 @@
-function getLocation() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showPosition);
 
-    } else {
-        document.getElementbyId("geojson").value = "Geolocation is not supported by this browser.";
-    }
-}
 
-function showPosition(position) {
-    var coordLat = position.coords.longitude;
-    var coordLong = position.coords.latitude;
-    console.log(coordLat, coordLong);
-}
-
-getLocation();
-
-/**
- * @description This function is called, when URL can't access data
- * @param {*} e 
- */
-function errorcallback(e) {
-    // console.dir(x);
-    // console.dir(e);
-    document.getElementById("content").innerHTML = "errorcallback: check web-console";
-}
-
-/**
- * @description This function is called when URL can load data
- */
-function loadcallback() {
-    //console.dir(x);
-    //console.log(x.status);
-}
-
-// This is the resource URL from where to access data
-var resource = "https://rest.busradar.conterra.de/prod/haltestellen";
-
-// XHR-obejct requests
-var x = new XMLHttpRequest();
-x.onload = loadcallback;
-x.onerror = errorcallback;
-x.onreadystatechange = statechangecallback;
-x.open("GET", resource, true);
-x.send();
-
-//initialize output array(global)
-var inicall = [];
-
-/**
- * @description This function is the callback function of the URL that gets the users closest
- * 5 busstops in Muenster, including their distance and their direction and saves all these informations
- * in an array.
- */
-function statechangecallback() {
-    //if the data is okay
-    if (x.status == "200" && x.readyState == 4) {
-        // initialize output array  
-        var narr = [];
-        // convert received data to JS-object
-        var t = JSON.parse(x.response);
-
-        // for all features in the received data  
-        for (i = 0; i < t.features.length; i++) {
-            // get name of busstop
-            inicall.push(t.features[i]);
-        }
-
-        inicall.forEach((object) => {
-            document.createElement();
-        });
-    }
-}
 
 /**
  * @description This function takes the input coordinates from an oringin and a destination as arrays
@@ -80,7 +9,7 @@ function statechangecallback() {
  * @return {number} d - the distance
   */
 
-var dist = function (origin, dest) {
+var dist = function(origin, dest){
 
     //get coordinates of point
     var lon1 = origin[0];
@@ -90,89 +19,163 @@ var dist = function (origin, dest) {
 
     //degrees to radiants
     var R = 6371e3; // metres
-    var φ1 = lat1 * (Math.PI / 180);
-    var φ2 = lat2 * (Math.PI / 180);
-    var φ3 = lon1 * (Math.PI / 180);
-    var φ4 = lon2 * (Math.PI / 180);
-    var Δφ = (lat2 - lat1) * (Math.PI / 180);
-    var Δλ = (lon2 - lon1) * (Math.PI / 180);
+    var φ1 = lat1 * (Math.PI/180);
+    var φ2 = lat2 * (Math.PI/180);
+    var φ3 = lon1 * (Math.PI/180);
+    var φ4 = lon2 * (Math.PI/180);
+    var Δφ = (lat2-lat1) * (Math.PI/180);
+    var Δλ = (lon2-lon1) * (Math.PI/180);
 
     //calculate distances
-    var a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
-        Math.cos(φ1) * Math.cos(φ2) *
-        Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
-    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    var a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
+            Math.cos(φ1) * Math.cos(φ2) *
+            Math.sin(Δλ/2) * Math.sin(Δλ/2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 
     //distance
     var d = Math.round(R * c);
 
-
     return d;
 }
 
-/**
-* @description This function takes the input coordinates from an oringin and a destination as arrays
-* and calculates the direction from the origin point to that destination point as string (e.g N/S/SE etc.)
-* @param {array} origin - the single point that is the origin to other points
-* @param {array} dest - a single point to which the direction has to be calculated to
-* @return {string} text - the direction in text format (e.g. "N"/"SE" etc.)
-*/
 
-var direc = function (origin, dest) {
 
-    //get coordinates of point
-    var lon1 = origin[0];
-    var lat1 = origin[1];
-    var lon2 = dest[0];
-    var lat2 = dest[1];
+AFRAME.registerComponent("clickhandler", {
+  init: function() {
+    this.el.addEventListener("click", () => {
+      alert(this.el.getAttribute('name'));
+    });
+  }
+});
 
-    //degrees to radiants
-    var R = 6371e3; // metres
-    var φ1 = lat1 * (Math.PI / 180);
-    var φ2 = lat2 * (Math.PI / 180);
-    var φ3 = lon1 * (Math.PI / 180);
-    var φ4 = lon2 * (Math.PI / 180);
-    var Δφ = (lat2 - lat1) * (Math.PI / 180);
-    var Δλ = (lon2 - lon1) * (Math.PI / 180);
-
-    //bearing
-    var y = Math.sin((φ4 - φ3) * Math.cos(φ2));
-    var x = Math.cos(φ1) * Math.sin(φ2) - Math.sin(φ1) * Math.cos(φ2) * Math.cos(φ4 - φ3);
-    var brng = Math.atan2(y, x) * 180 / Math.PI;
-
-    //avoid negative bearing
-    if (brng < 0) {
-        brng += 360;
+function loadPlaces(position){
+  $.ajax({  url: "https://rest.busradar.conterra.de/prod/haltestellen", 
+            type: "GET",
+            async: false,
+            success: busstops_callback  
+          });
+  
+  
+  var inicall = [];
+  
+    
+  /**
+  * @description This function is the callback function of the URL that gets the users closest
+  * 5 busstops in Muenster, including their distance and their direction and saves all these informations
+  * in an array.
+  */
+  function busstops_callback(x) {
+  
+      //var position = navigator.geolocation.getCurrentPosition();
+      var narr =[];
+      
+    for (i=0; i< x.features.length; i++ ){
+        // get name of busstop
+        var lagebez = x.features[i].properties.lbez;
+        //get coordinates of busstop
+        var coords = x.features[i].geometry.coordinates;
+        //get distance of busstop
+        var distance = dist([position.coords.longitude, position.coords.latitudeo], coords);
+                //save all the data above in a single array
+        var inarr = [lagebez, coords, distance];
+        //push the array into the output array
+        narr.push(inarr);
     }
 
-    return brng;
+   // sort the busstops in descending disctance order
+    narr.sort(
+    function(a,b) {
+    return a[2] - b[2];
+    });
+
+    // save the closest 5 busstops in the global array   
+    inicall = narr.slice(0,5);
+    // when data is loaded, activate the "Kalkulieren"-button
+
+console.log(inicall);
+
+var places = [
+  {
+      name: inicall[0][0],
+      location: {
+          lat: inicall[0][1][1], 
+          lng: inicall[0][1][0], 
+      }
+  },
+  {
+    name: inicall[1][0],
+    location: {
+        lat: inicall[1][1][1], 
+        lng: inicall[1][1][0], 
+      }
+      
+  },
+  {
+    name: inicall[2][0],
+    location: {
+        lat: inicall[2][1][1], 
+        lng: inicall[2][1][0], 
+    }
+},
+{
+    name: inicall[3][0],
+    location: {
+        lat: inicall[3][1][1], 
+        lng: inicall[3][1][0], 
+      }
+      
+  },
+  {
+    name: inicall[4][0],
+    location: {
+        lat: inicall[4][1][1], 
+        lng: inicall[4][1][0], 
+      }
+      
+  }];
+  main(places);
 }
 
-function main(){
-  // Access the coordinates of the point (GeoJson)
-  //var pnt = JSON.parse(inicall); 
+}
 
-  // initialize output array
-  outarr = [];
 
-  // for every point in pointcloud do the following calculations
-  for (var i = 0; i < inicall.length; i++) {
-      var name = inicall.properties.lbez [i]
-      var d = dist(getLocation(), inicall.geometry.coordinates [i]); // Distance (function-call)
-      var text = direc(getLocation(), inicall.geometry.coordinates [i]); // Direction (function-call)
-     
+window.onload = () => {
+  const places = navigator.geolocation.getCurrentPosition(loadPlaces);}
+   //get current user location
+  function main(places){
+    //places = loadPlaces();
+    //var places = loadPlaces();
+      //.then((places) => {
+        // get scene
+        var scene = document.querySelector('a-scene');
+      
 
-      //all together in one array
-      outarr.push([name, d, text]);
+  //return navigator.geolocation.getCurrentPosition(function (position) { //get current user location
+  
+      // add every Busstop to the scene
+      places.forEach((place) => {
+          const latitude = place.location.lat;
+          const longitude = place.location.lng;
 
-      //sort values in array by ascending distances
-      outarr.sort(
-          function(a,b) {
-          return a[1] - b[1];
-          }
-      )
-      outarr.slice(0,5);
-      return outarr;
-      } 
+          // add place icon
+          const icon = document.createElement('a-image');
+          icon.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude}`);
+          icon.setAttribute('name', place.name);
+          icon.setAttribute('src', ' https://a2beckj.github.io/Bushaltestelle_img.jpg ');
+          icon.setAttribute('look-at', '[gps-camera]');
+          icon.setAttribute('clickhandler', true);
 
-      console.log(main());
+          // for debug purposes, just show in a bigger scale
+          icon.setAttribute('scale', '20, 20');
+
+          scene.appendChild(icon);
+        }); 
+      
+  (err) => console.error('Error in retrieving position', err),
+  {
+      enableHighAccuracy: true,
+      maximumAge: 0,
+      timeout: 27000,
+  }
+    
+    }
