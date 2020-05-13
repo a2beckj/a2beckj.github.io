@@ -45,7 +45,7 @@ var dist = function(origin, dest){
 AFRAME.registerComponent("clickhandler", {
   init: function() {
     this.el.addEventListener("click", () => {
-      alert(this.el.getAttribute('name'));
+      alert(this.el.getAttribute('name', 'distance'));
     });
   }
 });
@@ -99,6 +99,7 @@ console.log(inicall);
 var places = [
   {
       name: inicall[0][0],
+      distance: inicall [0][2],
       location: {
           lat: inicall[0][1][1], 
           lng: inicall[0][1][0], 
@@ -106,6 +107,7 @@ var places = [
   },
   {
     name: inicall[1][0],
+    distance: inicall [1][2],
     location: {
         lat: inicall[1][1][1], 
         lng: inicall[1][1][0], 
@@ -114,6 +116,7 @@ var places = [
   },
   {
     name: inicall[2][0],
+    distance: inicall [2][2],
     location: {
         lat: inicall[2][1][1], 
         lng: inicall[2][1][0], 
@@ -121,6 +124,7 @@ var places = [
 },
 {
     name: inicall[3][0],
+    distance: inicall [3][2],
     location: {
         lat: inicall[3][1][1], 
         lng: inicall[3][1][0], 
@@ -129,6 +133,7 @@ var places = [
   },
   {
     name: inicall[4][0],
+    distance: inicall [4][2],
     location: {
         lat: inicall[4][1][1], 
         lng: inicall[4][1][0], 
@@ -163,6 +168,7 @@ var places = [
           const icon = document.createElement('a-image');
           icon.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude}`);
           icon.setAttribute('name', place.name);
+          icon.setAttribute('distance', place.distance);
           icon.setAttribute('src', ' ./Bushaltestelle_img.png ');
           icon.setAttribute('look-at', '[gps-camera]');
           icon.setAttribute('clickhandler', true);
