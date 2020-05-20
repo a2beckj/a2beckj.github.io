@@ -50,9 +50,9 @@ AFRAME.registerComponent("clickhandler", {
       //), (this.el.getAttribute('distance')));
       
       var msg = (
-                ("name: " + (this.el.getAttribute('name'))) + 
-                ("distance: " + (this.el.getAttribute('distance')))
-                //("buslines: " + (this.el.getAttribute('buslines'))) 
+                "name: " + (this.el.getAttribute('name'))+
+                 "\ndistance: " + (this.el.getAttribute('distance'))+
+                  "\nbuslines: " + (this.el.getAttribute('buslines'))
                 );
             console.log(msg);
       alert(msg);
