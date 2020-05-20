@@ -42,11 +42,11 @@ var dist = function(origin, dest){
 
 
 
-/*
+
 AFRAME.registerComponent("clickhandler", {
   init: function() {
     this.el.addEventListener("click", () => {
-      alert(this.el.getAttribute('name', 'distance'));
+      //alert(this.el.getAttribute('name', 'distance'));
       //), (this.el.getAttribute('distance')));
       
       var msg = (
@@ -277,7 +277,7 @@ var places = [
       timeout: 27000,
   }
 }
-
+/*
 document.querySelector('a-image').addEventListener('click', function (evt) {
   alert('This 2D element was clicked!');
-});
+});*/
