@@ -41,9 +41,14 @@ var dist = function(origin, dest){
 
 
 
+
+/*
 AFRAME.registerComponent("clickhandler", {
   init: function() {
     this.el.addEventListener("click", () => {
+      alert(this.el.getAttribute('name', 'distance'));
+      //), (this.el.getAttribute('distance')));
+      
       var msg = (
                 ("name: " + (this.el.getAttribute('name'))) + newLine + 
                 ("distance: " + (this.el.getAttribute('distance'))) + newLine + 
@@ -55,7 +60,7 @@ AFRAME.registerComponent("clickhandler", {
     });
   }
 });
-
+/*
 /*
 var promise = new Promise (function (resolve, reject){
   var arr = [];
@@ -272,3 +277,7 @@ var places = [
       timeout: 27000,
   }
 }
+
+document.querySelector('a-image').addEventListener('click', function (evt) {
+  alert('This 2D element was clicked!');
+});
